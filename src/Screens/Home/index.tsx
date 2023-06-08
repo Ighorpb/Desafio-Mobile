@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
-import { Container, MainTitle, Filter, Input, Img, Content, Button } from './styles';
+import { Container, MainTitle, Filter, Input, Img, Content } from './styles';
 import { useNavigation } from '@react-navigation/native';
 
 interface Data {
