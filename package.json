@@ -7,9 +7,12 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "api": "json-server ./src/services/server.json --host  172.18.0.126 --port 3333 --delay 700"
+    "api": "json-server ./src/services/server.json --host 192.168.1.20 --port 3333 --delay 700"
   },
   "dependencies": {
+    "@react-native-community/checkbox": "^0.5.15",
+    "@react-navigation/native": "^6.1.6",
+    "@react-navigation/stack": "^6.3.16",
     "axios": "^1.4.0",
     "expo": "~48.0.18",
     "expo-status-bar": "~1.4.4",
@@ -20,7 +23,10 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.0.14",
-    "typescript": "^4.9.4"
+    "@types/react-native": "^0.72.2",
+    "@types/uuid": "^9.0.1",
+    "expo-cli": "^6.3.8",
+    "typescript": "^4.9.5"
   },
   "private": true
 }

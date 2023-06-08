@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
 import { Container, MainTitle, Filter, Input, Img, Content, Button } from './styles';
+import { useNavigation } from '@react-navigation/native';
 
 interface Data {
     id: string;
@@ -19,6 +20,7 @@ interface Data {
 
 export function Home() {
     const [data, setData] = useState<Data[]>([]);
+    const navigation = useNavigation<any>()
 
     function showData() {
         axios
@@ -36,12 +38,19 @@ export function Home() {
         showData();
     }, []);
 
+    function handleCarDetails() {
+        navigation.navigate('Register')
+    }
+
     return (
         <Container>
             <MainTitle>Compromisso</MainTitle>
             <Filter>
                 <Input placeholder="Pesquise pelo título ou descrição..." />
             </Filter>
+            <TouchableOpacity onPress={() => handleCarDetails()}>
+             Cadastro
+            </TouchableOpacity>
             <Content>
                 <FlatList
                     data={data}
