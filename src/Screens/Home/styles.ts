@@ -1,4 +1,4 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 export const Container = styled.View`
   flex: 1;
@@ -13,7 +13,7 @@ export const MainTitle = styled.Text`
 `;
 
 export const Filter = styled.View`
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
@@ -26,13 +26,13 @@ export const Input = styled.TextInput`
   border-color: #ccc;
   border-radius: 4px;
   font-size: 14px;
+  margin-right: 10px;
 `;
 
 export const Img = styled.Image`
   border-radius: 25px;
   width: 50px;
   height: 50px;
-  margin-right: 10px;
 `;
 
 export const Content = styled.View`
@@ -51,4 +51,5 @@ export const CadastroButton = styled.TouchableOpacity`
 export const CadastroButtonText = styled.Text`
   color: #fff;
   font-size: 16px;
+  text-align: center;
 `;

@@ -1,32 +1,31 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 export const ModalContainer = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 export const ModalContent = styled.View`
   background-color: #fff;
   padding: 20px;
-  border-radius: 4px;
-  max-width: 300px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  flex-direction: row;
-  justify-content: space-between;
+  border-radius: 8px;
 `;
 
-export const CloseButton = styled.Text`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
-  font-size: 20px;
-  color: #aaa;
-  transition: color 0.3s ease;
+export const CloseButton = styled.TouchableOpacity`
+  align-self: flex-end;
+`;
 
-  &:hover {
-    color: #333;
-  }
+export const CloseButtonText = styled.Text`
+  font-size: 18px;
+`;
+
+export const Title = styled.Text`
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+export const ContentContainer = styled.View`
+  margin-top: 10px;
 `;

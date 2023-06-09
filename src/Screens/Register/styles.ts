@@ -1,4 +1,4 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 export const Container = styled.View`
   flex: 1;
@@ -8,11 +8,18 @@ export const Container = styled.View`
   background-color: #f5f5f5;
 `;
 
+export const Header = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+`;
+
 export const Title = styled.Text`
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
 `;
+
 
 export const Input = styled.TextInput`
   width: 100%;
@@ -25,15 +32,22 @@ export const Input = styled.TextInput`
 
 export const CheckboxContainer = styled.View`
   margin-top: 20px;
+  flex-direction: column;
 `;
 
 export const CheckboxLabel = styled.Text`
   font-weight: bold;
   margin-bottom: 10px;
+  color: #333;
+`;
+
+export const CheckboxWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
 `;
 
 export const CheckboxText = styled.Text`
-  margin-bottom: 5px;
+  margin-left: 10px;
 `;
 
 export const Button = styled.TouchableOpacity`
@@ -45,7 +59,7 @@ export const Button = styled.TouchableOpacity`
 `;
 
 export const ButtonText = styled.Text`
-  color: #fff;
+  color: white;
   font-size: 18px;
   font-weight: bold;
 `;

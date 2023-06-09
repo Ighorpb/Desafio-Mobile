@@ -1,32 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity } from 'react-native';
-import { View, Text, Image } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import { Text, Image } from 'react-native';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
-import axios from 'axios';
 import { Modal } from '../../Components/Modal';
-
+import { BackButton } from '../../Components/BackButton';
 import {
   Container,
-  Content,
-  MainTitle,
-  CheckboxContainer,
-  CheckboxLabel,
-  CheckboxGroup,
-  Buttons,
-  Button,
-  ButtonContainer,
-  CancelButton,
-  RemoveButton,
-  Img,
+  TextContainer,
+  Title,
+  Header,
+  Description,
+  DaysContainer,
+  DaysTitle,
+  ButtonEdit,
   ButtonDelete,
+  ButtonText,
+  ButtonConfirm,
+  ButtonCancel
 } from './styles';
+import { api } from '../../services/api';
 
 interface Data {
   id: string;
   compromisso: string;
   description: string;
-  imagem: string;
   segunda_feira: boolean;
   terca_feira: boolean;
   quarta_feira: boolean;
@@ -37,19 +34,20 @@ interface Data {
 }
 
 type RootStackParamList = {
-  Data: Data;
+  Details: { data: Data };
 };
 
-type MyScreenRouteProp = RouteProp<RootStackParamList, 'Data'>;
+type MyScreenRouteProp = RouteProp<RootStackParamList, 'Details'>;
 
-
-export function Details()  {
+export function Details() {
   const [data, setData] = useState<Data | null>(null);
   const navigation = useNavigation<any>();
-const route = useRoute<MyScreenRouteProp>();
+  const route = useRoute<MyScreenRouteProp>();
+  const [isloading, setIsLoading] = useState(true);
 
-  const { id } = route.params;
-  const [checkedDays, setCheckedDays] = useState<string[]>([]);
+  const { data: taskData } = route.params;
+  const [checkedDays, setCheckedDays] = useState<string[]>([]); // Inicialmente vazio
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -60,27 +58,19 @@ const route = useRoute<MyScreenRouteProp>();
     setIsModalOpen(false);
   };
 
-  const showApi = () => {
-    axios
-      .get(`http://172.18.0.126:3333/tasks/${id}`)
-      .then((response) => {
-        const task: Data = response.data;
-        setData(task);
-      })
-      .catch((err) => {
-        console.error('Erro ao buscar dados da API:', err);
-      });
-  };
+
 
   useEffect(() => {
+    const showApi = async () => {
+      const response = await api
+        .get(`/tasks/${taskData.id}`)
+      const { data: task } = response;
+      setData(task);
+      setCheckedDays(getCheckedDays(task));
+      setIsLoading(false)
+    }
     showApi();
   }, []);
-
-  useEffect(() => {
-  if (data) {
-    setCheckedDays(getCheckedDays(data));
-  }
-}, [data]);
 
   const getCheckedDays = (task: Data): string[] => {
     const checkedDays: string[] = [];
@@ -94,15 +84,19 @@ const route = useRoute<MyScreenRouteProp>();
     return checkedDays;
   };
 
-  const handleCheckboxChange = (values: string[]) => {
-    setCheckedDays(values);
+  const handleCheckboxPress = (day: string) => {
+    console.log("checkedDays.includ3333es(day)", checkedDays.includes(day))
+    if (checkedDays.includes(day)) {
+      setCheckedDays(checkedDays.filter((checkedDay) => checkedDay !== day));
+    } else {
+      setCheckedDays([...checkedDays, day]);
+    }
   };
 
   const handleDeleteList = () => {
-    axios
-      .delete(`http://172.18.0.126:3333/tasks/${id}`)
+    api
+      .delete(`/tasks/${taskData.id}`)
       .then(() => {
-        setData(null);
         navigation.navigate('Home');
       })
       .catch((error) => {
@@ -114,128 +108,71 @@ const route = useRoute<MyScreenRouteProp>();
     return <Text>Carregando...</Text>;
   }
 
+  const handleCardRegister = () => {
+    navigation.navigate('Register', {
+      id: data.id,
+      compromisso: data.compromisso,
+      description: data.description,
+      segunda_feira: data.segunda_feira,
+      terca_feira: data.terca_feira,
+      quarta_feira: data.quarta_feira,
+      quinta_feira: data.quinta_feira,
+      sexta_feira: data.sexta_feira,
+      sabado: data.sabado,
+      domingo: data.domingo,
+    },
+    );
+  };
+
+  function handleBack() {
+    navigation.goBack()
+  }
+
+
+  if (isloading) {
+    return (
+      <></>
+    )
+  }
   return (
     <Container>
-      <MainTitle>{data.compromisso}</MainTitle>
-      <View key={data.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Img source={{ uri: data.imagem }} />
-        <Text>{data.description}</Text>
-      </View>
-       <Content>
-          <CheckboxContainer>
-          <CheckboxLabel>
-    <CheckBox
-      value={checkedDays.includes('Segunda-feira')}
-      onValueChange={(value) => {
-        if (value) {
-          setCheckedDays([...checkedDays, 'Segunda-feira']);
-        } else {
-          setCheckedDays(checkedDays.filter((day) => day !== 'Segunda-feira'));
-        }
-      }}
-    />
-    <Text>Segunda-feira</Text>
-  </CheckboxLabel>
-  <CheckboxLabel>
-    <CheckBox
-      value={checkedDays.includes('Terça-feira')}
-      onValueChange={(value) => {
-        if (value) {
-          setCheckedDays([...checkedDays, 'Terça-feira']);
-        } else {
-          setCheckedDays(checkedDays.filter((day) => day !== 'Terça-feira'));
-        }
-      }}
-    />
-    <Text>Terça-feira</Text>
-  </CheckboxLabel>
-  <CheckboxLabel>
-    <CheckBox
-      value={checkedDays.includes('Quarta-feira')}
-      onValueChange={(value) => {
-        if (value) {
-          setCheckedDays([...checkedDays, 'Quarta-feira']);
-        } else {
-          setCheckedDays(checkedDays.filter((day) => day !== 'Quarta-feira'));
-        }
-      }}
-    />
-    <Text>Quarta-feira</Text>
-  </CheckboxLabel>
-  <CheckboxLabel>
-    <CheckBox
-      value={checkedDays.includes('Quinta-feira')}
-      onValueChange={(value) => {
-        if (value) {
-          setCheckedDays([...checkedDays, 'Quinta-feira']);
-        } else {
-          setCheckedDays(checkedDays.filter((day) => day !== 'Quinta-feira'));
-        }
-      }}
-    />
-    <Text>Quinta-feira</Text>
-  </CheckboxLabel>
-  <CheckboxLabel>
-    <CheckBox
-      value={checkedDays.includes('Sexta-feira')}
-      onValueChange={(value) => {
-        if (value) {
-          setCheckedDays([...checkedDays, 'Sexta-feira']);
-        } else {
-          setCheckedDays(checkedDays.filter((day) => day !== 'Sexta-feira'));
-        }
-      }}
-    />
-    <Text>Sexta-feira</Text>
-  </CheckboxLabel>
-  <CheckboxLabel>
-    <CheckBox
-      value={checkedDays.includes('Sábado')}
-      onValueChange={(value) => {
-        if (value) {
-          setCheckedDays([...checkedDays, 'Sábado']);
-        } else {
-          setCheckedDays(checkedDays.filter((day) => day !== 'Sábado'));
-        }
-      }}
-    />
-    <Text>Sábado</Text>
-  </CheckboxLabel>
-  <CheckboxLabel>
-    <CheckBox
-      value={checkedDays.includes('Domingo')}
-      onValueChange={(value) => {
-        if (value) {
-          setCheckedDays([...checkedDays, 'Domingo']);
-        } else {
-          setCheckedDays(checkedDays.filter((day) => day !== 'Domingo'));
-        }
-      }}
-    />
-    <Text>Domingo</Text>
-  </CheckboxLabel>
-          </CheckboxContainer>
-        <Buttons>
-          <TouchableOpacity onPress={() => navigation.navigate(`/cadastro/${id}`)}>
-            <Text>Editar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={openModal}>
-            <Text>Deletar</Text>
-          </TouchableOpacity>
-        </Buttons>
-        <Modal isOpen={isModalOpen} onClose={closeModal} title="Remover compromisso?">
-          <ButtonContainer>
-            <TouchableOpacity onPress={closeModal}>
-              <Text>Cancelar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleDeleteList}>
-              <Text>Remover</Text>
-            </TouchableOpacity>
-          </ButtonContainer>
-        </Modal>
-      </Content>
+      <Header>
+        <BackButton onPress={handleBack} />
+      </Header>
+      <TextContainer>
+        <Title>{data.compromisso}</Title>
+        <Description>{data.description}</Description>
+      </TextContainer>
+      <DaysContainer>
+        <DaysTitle>Dias selecionados:</DaysTitle>
+        {['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'].map(
+          (day) => (
+            <BouncyCheckbox
+              key={day}
+              disabled={true}
+              isChecked={checkedDays.includes(day)}
+              text={day}
+              onPress={() => handleCheckboxPress(day)}
+            />
+          )
+        )}
+      </DaysContainer>
+      <ButtonEdit onPress={handleCardRegister}>
+        <ButtonText>Editar</ButtonText>
+      </ButtonEdit>
+      <ButtonDelete onPress={openModal}>
+        <ButtonText>Excluir</ButtonText>
+      </ButtonDelete>
+      <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
+        <Text>Remover Compromisso?</Text>
+        <ButtonConfirm onPress={handleDeleteList}>
+          <ButtonText>Deletar</ButtonText>
+        </ButtonConfirm>
+        <ButtonCancel onPress={closeModal}>
+          <ButtonText>Cancelar</ButtonText>
+        </ButtonCancel>
+      </Modal>
+
     </Container>
   );
-};
-
-export default Details;
+}
