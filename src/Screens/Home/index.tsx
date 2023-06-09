@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
-import { Container, MainTitle, Filter, Input, Img, Content } from './styles';
+import { View, Text, FlatList, Image, StatusBar } from 'react-native';
+import {
+  Container,
+  MainTitle,
+  Filter,
+  Input,
+  Content,
+  CadastroButton,
+  CadastroButtonText
+} from './styles';
+
 import { useNavigation } from '@react-navigation/native';
 
 interface Data {
@@ -24,7 +33,7 @@ export function Home() {
 
     function showData() {
         axios
-            .get('http://172.18.0.126:3333/tasks')
+            .get('http://192.168.1.10:3333/tasks')
             .then((response) => {
                 console.log(response.data);
                 setData(response.data);
@@ -44,13 +53,18 @@ export function Home() {
 
     return (
         <Container>
-            <MainTitle>Compromisso</MainTitle>
-            <Filter>
-                <Input placeholder="Pesquise pelo título ou descrição..." />
-            </Filter>
-            <TouchableOpacity onPress={() => handleCarDetails()}>
-             Cadastro
-            </TouchableOpacity>
+            <StatusBar 
+                barStyle='light-content'
+                backgroundColor='transparent'
+                translucent={true}
+            />
+          <MainTitle>Compromisso</MainTitle>
+          <Filter>
+            <Input placeholder="Pesquise pelo título ou descrição..." />
+          </Filter>
+          <CadastroButton onPress={() => handleCarDetails()}>
+            <CadastroButtonText>Cadastro</CadastroButtonText>
+          </CadastroButton>
             <Content>
                 <FlatList
                     data={data}

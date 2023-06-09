@@ -1,9 +1,10 @@
-import styled from "styled-components/native";
+import styled from 'styled-components/native';
 
 export const Container = styled.View`
   flex: 1;
   align-items: center;
   justify-content: flex-start;
+  margin-top: 50px;
 `;
 
 export const MainTitle = styled.Text`
@@ -41,13 +42,13 @@ export const Content = styled.View`
   flex: 1;
 `;
 
-// export const Button = styled.Text`
-//   background-color: #0056b3;
-//   color: #fff;
-//   padding: 10px;
-//   border-radius: 4px;
-//   font-size: 16px;
-//   position: absolute;
-//   top: 10px;
-//   right: 10px;
-// `;
+export const CadastroButton = styled.TouchableOpacity`
+  background-color: #0056b3;
+  padding: 10px;
+  border-radius: 4px;
+`;
+
+export const CadastroButtonText = styled.Text`
+  color: #fff;
+  font-size: 16px;
+`;
